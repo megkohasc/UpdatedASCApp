@@ -3,70 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roof Calculator</title>
+
+<title>ASC Roof Calculator</title>
 
 <style>
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-        margin: 0;
-        background: #f5f5f7;
-    }
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f2f2f7;
+}
 
-    .container {
-        max-width: 500px;
-        margin: auto;
-        padding: 16px;
-    }
+.container {
+    max-width: 480px;
+    margin: auto;
+    padding-bottom: 80px;
+}
 
-    .logo {
-        display: block;
-        margin: 20px auto;
-        width: 150px;
-    }
+.logo {
+    display: block;
+    margin: 20px auto 10px;
+    width: 150px;
+}
 
-    h1 {
-        text-align: center;
-    }
+.title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
 
-    .tabs {
-        display: flex;
-        justify-content: space-around;
-        background: #fff;
-        padding: 10px;
-        border-top: 1px solid #ddd;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        max-width: 500px;
-    }
+/* iOS Card */
+.card {
+    background: white;
+    border-radius: 14px;
+    margin: 12px;
+    padding: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
 
-    .tab {
-        cursor: pointer;
-    }
+/* Segmented Control */
+.segment {
+    display: flex;
+    background: #e5e5ea;
+    border-radius: 8px;
+    overflow: hidden;
+}
 
-    .section {
-        background: #fff;
-        padding: 12px;
-        margin-bottom: 12px;
-        border-radius: 10px;
-    }
+.segment button {
+    flex: 1;
+    border: none;
+    padding: 8px;
+    background: transparent;
+    font-weight: 500;
+    cursor: pointer;
+}
 
-    button {
-        width: 100%;
-        padding: 12px;
-        border: none;
-        border-radius: 10px;
-        margin-top: 10px;
-        font-weight: bold;
-        cursor: pointer;
-    }
+.segment button.active {
+    background: white;
+    border-radius: 6px;
+}
 
-    .blue { background: rgba(0,0,255,0.85); color: #fff; }
-    .green { background: rgba(0,128,0,0.85); color: #fff; }
-    .orange { background: rgba(255,165,0,0.85); color: #fff; }
-    .yellow { background: rgba(255,215,0,0.85); color: #fff; }
+/* Inputs */
+input, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-top: 6px;
+    font-size: 16px;
+}
 
-    .hidden { display: none; }
+/* Primary Button */
+.primary-btn {
+    width: calc(100% - 24px);
+    margin: 12px;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: #007aff;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Result */
+.result {
+    white-space: pre-line;
+    font-size: 15px;
+}
+
+/* Tabs */
+.tabs {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    background: #fff;
+    border-top: 1px solid #ddd;
+}
+
+.tabs div {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* Contact Buttons */
+.contact-btn {
+    display: block;
+    margin: 10px 12px;
+    padding: 14px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    font-weight: 600;
+}
+
+.blue { background: rgba(0,122,255,0.9); }
+.green { background: rgba(52,199,89,0.9); }
+.orange { background: rgba(255,149,0,0.9); }
+.yellow { background: rgba(255,204,0,0.9); }
+
+.hidden { display: none; }
 
 </style>
 </head>
@@ -75,28 +136,27 @@
 
 <div class="container">
 
-<img src="ASCLogo1.png" class="logo">
-
-<h1>Roof Calculator</h1>
+<img src="assets/ASCLogo1.png" class="logo">
+<div class="title">Roof Calculator</div>
 
 <!-- CALCULATOR -->
 <div id="calculator">
 
-<div class="section">
-    <label>Calculator Type</label><br>
-    <select id="calcType">
-        <option>Coatings</option>
-        <option>Rolls</option>
-    </select>
+<div class="card">
+    <label>Calculator Type</label>
+    <div class="segment">
+        <button onclick="setType('Coatings')" id="btnCoatings" class="active">Coatings</button>
+        <button onclick="setType('Rolls')" id="btnRolls">Rolls</button>
+    </div>
 </div>
 
-<div class="section">
+<div class="card">
     <label>Roof Size (squares)</label>
-    <input type="number" id="roofSize" style="width:100%;">
+    <input type="number" id="roofSize">
 </div>
 
-<div class="section">
-    <label>Warranty</label><br>
+<div class="card">
+    <label>Warranty</label>
     <select id="warranty">
         <option>10 Year</option>
         <option>15 Year</option>
@@ -104,8 +164,8 @@
     </select>
 </div>
 
-<div class="section" id="coatingsSection">
-    <label>Coating Type</label><br>
+<div class="card" id="coatingsCard">
+    <label>Coating Type</label>
     <select id="coatingType">
         <option>ASC S Silicone</option>
         <option>ASC 1 Acrylic</option>
@@ -113,63 +173,65 @@
     </select>
 </div>
 
-<div class="section hidden" id="rollsSection">
-    <label>Roll System</label><br>
+<div class="card hidden" id="rollsCard">
+    <label>Roll System</label>
     <select id="rollSystem">
         <option>APP over SA</option>
         <option>SA over SA</option>
     </select>
 </div>
 
-<button onclick="calculate()">Calculate</button>
+<button class="primary-btn" onclick="calculate()">Calculate</button>
 
-<div class="section" id="result"></div>
+<div class="card result" id="result"></div>
 
 </div>
 
-<!-- PDF -->
+<!-- PDF VIEW -->
 <div id="pdf" class="hidden">
-    <div class="section">
-        <label>System</label>
-        <select id="system">
-            <option>ASC S Silicone</option>
-            <option>ASC 1 Acrylic</option>
-            <option>ASC X Acrylic</option>
-            <option>SBS SA</option>
-            <option>APP</option>
-        </select>
-    </div>
 
-    <div class="section">
-        <label>Warranty</label>
-        <select id="pdfWarranty">
-            <option>10 Year</option>
-            <option>15 Year</option>
-            <option>20 Year</option>
-        </select>
-    </div>
+<div class="card">
+    <label>System</label>
+    <select id="system">
+        <option>ASC S Silicone</option>
+        <option>ASC 1 Acrylic</option>
+        <option>ASC X Acrylic</option>
+        <option>SBS SA</option>
+        <option>APP</option>
+    </select>
+</div>
 
-    <button onclick="openPDF()">View PDF</button>
+<div class="card">
+    <label>Existing Material</label>
+    <select id="existing">
+        <option>ModBit</option>
+        <option>Foam</option>
+        <option>Metal</option>
+        <option>EPDM</option>
+        <option>TPO</option>
+    </select>
+</div>
+
+<div class="card">
+    <label>Warranty</label>
+    <select id="pdfWarranty">
+        <option>10 Year</option>
+        <option>15 Year</option>
+        <option>20 Year</option>
+    </select>
+</div>
+
+<button class="primary-btn" onclick="openPDF()">View PDF</button>
+
 </div>
 
 <!-- CONTACT -->
 <div id="contact" class="hidden">
 
-<button class="blue" onclick="window.open('https://maps.apple.com/?address=9631 De Soto Ave')">
-📍 Address
-</button>
-
-<button class="green" onclick="window.location='tel:5627778200'">
-📞 Call
-</button>
-
-<button class="orange" onclick="window.location='mailto:info@asc-bm.com'">
-✉️ Email
-</button>
-
-<button class="yellow" onclick="window.open('https://www.asc-bm.com')">
-🌐 Website
-</button>
+<a class="contact-btn blue" href="https://maps.apple.com/?address=9631 De Soto Ave">Address</a>
+<a class="contact-btn green" href="tel:5627778200">Call</a>
+<a class="contact-btn orange" href="mailto:info@asc-bm.com">Email</a>
+<a class="contact-btn yellow" href="https://www.asc-bm.com">Website</a>
 
 </div>
 
@@ -177,47 +239,44 @@
 
 <!-- TABS -->
 <div class="tabs">
-    <div class="tab" onclick="showTab('calculator')">Calculator</div>
-    <div class="tab" onclick="showTab('pdf')">Spec PDFs</div>
-    <div class="tab" onclick="showTab('contact')">Contact</div>
+    <div onclick="showTab('calculator')">Calculator</div>
+    <div onclick="showTab('pdf')">Spec PDFs</div>
+    <div onclick="showTab('contact')">Contact</div>
 </div>
 
 <script>
 
-function showTab(tab) {
-    document.getElementById('calculator').classList.add('hidden');
-    document.getElementById('pdf').classList.add('hidden');
-    document.getElementById('contact').classList.add('hidden');
+let calcType = "Coatings";
 
-    document.getElementById(tab).classList.remove('hidden');
+function setType(type) {
+    calcType = type;
+
+    btnCoatings.classList.remove("active");
+    btnRolls.classList.remove("active");
+
+    if (type === "Coatings") {
+        btnCoatings.classList.add("active");
+        coatingsCard.classList.remove("hidden");
+        rollsCard.classList.add("hidden");
+    } else {
+        btnRolls.classList.add("active");
+        coatingsCard.classList.add("hidden");
+        rollsCard.classList.remove("hidden");
+    }
 }
 
-// Toggle sections
-document.getElementById('calcType').addEventListener('change', function() {
-    if (this.value === "Coatings") {
-        coatingsSection.classList.remove('hidden');
-        rollsSection.classList.add('hidden');
-    } else {
-        coatingsSection.classList.add('hidden');
-        rollsSection.classList.remove('hidden');
-    }
-});
-
-// CALCULATION (1:1 logic from Swift)
 function calculate() {
-
-    let size = parseFloat(document.getElementById('roofSize').value);
-    let warranty = document.getElementById('warranty').value;
-    let type = document.getElementById('calcType').value;
+    let size = parseFloat(roofSize.value);
+    let warranty = warrantySelect = document.getElementById('warranty').value;
 
     if (!size) {
         result.innerText = "Please enter a valid roof size.";
         return;
     }
 
-    if (type === "Coatings") {
+    if (calcType === "Coatings") {
 
-        let coating = document.getElementById('coatingType').value;
+        let coating = coatingType.value;
         let gps = 0;
 
         if (coating === "ASC S Silicone") {
@@ -230,11 +289,19 @@ function calculate() {
 
         let total = size * gps;
 
-        result.innerText = `Total Coating Required: ${total.toFixed(1)} gallons`;
+        result.innerText =
+`Coatings Material Estimate
+
+Roof Size: ${size.toFixed(1)} squares
+Warranty: ${warranty}
+Coating: ${coating}
+
+• Total Coating Required:
+  ${total.toFixed(1)} gallons`;
 
     } else {
 
-        let system = document.getElementById('rollSystem').value;
+        let system = rollSystem.value;
         let squares = Math.ceil(size);
 
         if (system === "SA over SA") {
@@ -242,20 +309,56 @@ function calculate() {
             let base = warranty === "20 Year" ? squares * 0.6 :
                        warranty === "15 Year" ? squares * 0.5 : squares;
 
-            result.innerText = `Base Rolls: ${Math.floor(base)} | Cap Rolls: ${squares}`;
+            result.innerText =
+`SA over SA Material Estimate
+
+Roof Size: ${squares} squares
+
+• Base Rolls: ${Math.floor(base)}
+• Cap Rolls: ${squares}
+
+Based on ${warranty} system`;
 
         } else {
 
             let interply = warranty === "20 Year" ? squares * 0.6 :
                            warranty === "15 Year" ? squares * 0.5 : squares * 0.5;
 
-            result.innerText = `Interply: ${Math.floor(interply)} | Cap Rolls: ${squares}`;
+            result.innerText =
+`APP over SA Material Estimate
+
+Roof Size: ${squares} squares
+
+• Interply Rolls: ${Math.floor(interply)}
+• Cap Rolls: ${squares}
+
+Based on ${warranty} system`;
         }
     }
 }
 
 function openPDF() {
-    alert("Hook this up to your hosted PDFs (same naming logic as app).");
+    let system = document.getElementById('system').value.replaceAll(" ", "_");
+    let existing = document.getElementById('existing').value;
+    let warranty = document.getElementById('pdfWarranty').value.replace(" Year","");
+
+    let fileName;
+
+    if (system === "SBS_SA" || system === "APP") {
+        fileName = `${system}_${warranty}.pdf`;
+    } else {
+        fileName = `${existing}_${system}_${warranty}.pdf`;
+    }
+
+    window.open(`pdfs/${fileName}`, "_blank");
+}
+
+function showTab(tab) {
+    calculator.classList.add("hidden");
+    pdf.classList.add("hidden");
+    contact.classList.add("hidden");
+
+    document.getElementById(tab).classList.remove("hidden");
 }
 
 </script>
